@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_dashboard.css') }}">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Wedding Dashboard, {{ guest.name }}!</h1>
+
+    <form method="post" action="{{ url_for('dashboard') }}">
+        <p>Will you be attending the wedding?</p>
+        <label>
+            <input type="radio" name="attending" value="accept" {% if guest.attending %}checked{% endif %}> Accept
+        </label>
+        <label>
+            <input type="radio" name="attending" value="decline" {% if guest.attending is not none and not guest.attending %}checked{% endif %}> Decline
+        </label>
+
+        {% if guest.attending %}
+            <p>Select diet requirements:</p>
+            <label>
+                <input type="checkbox" name="vegetarian" {% if guest.diet_requirements == 'vegetarian' %}checked{% endif %}> Vegetarian
+            </label>
+            <label>
+                <input type="checkbox" name="vegan" {% if guest.diet_requirements == 'vegan' %}checked{% endif %}> Vegan
+            </label>
+            <label>
+                <input type="checkbox" name="gluten_free" {% if guest.diet_requirements == 'gluten-free' %}checked{% endif %}> Gluten-free
+            </label>
+            <label>
+                <input type="checkbox" name="none_but" {% if guest.diet_requirements == 'none_but' %}checked{% endif %}> None, but...
+            </label>
+
+            <p>Additional Information:</p>
+            <textarea name="additional_info" rows="4" cols="50">{{ guest.additional_info }}</textarea>
+        {% endif %}
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
